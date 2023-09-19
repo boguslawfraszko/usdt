@@ -1,12 +1,18 @@
 pragma solidity ^0.8.21;
 
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import "../utils/SafeMath.sol";
+import "../utils/Owned.sol";
 
 /**
  * @title Standard ERC20 token
  *
+ * @dev Implementation of the basic standard token.
+ * @dev https://github.com/ethereum/EIPs/issues/20
+ * @dev Based on code by FirstBlood: https://github.com/Firstbloodio/token/blob/master/smart_contract/FirstBloodToken.sol
  */
-contract USDT is Ownable {
+contract USDT is Owned {
+    using SafeMath for uint256;
+
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(
         address indexed owner,
@@ -24,8 +30,9 @@ contract USDT is Ownable {
     string public constant symbol = "USDT";
     uint8 public decimals = 18;
 
-    constructor(address _to, uint256 _amount) public {
-        totalSupply_ = totalSupply_.balances[_to] = balances[_to].add(_amount);
+    constructor(address _to, uint256 _amount) {
+        totalSupply_ = totalSupply_.add(_amount);
+        balances[_to] = balances[_to].add(_amount);
     }
 
     /**
